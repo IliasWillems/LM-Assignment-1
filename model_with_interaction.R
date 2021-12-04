@@ -160,7 +160,13 @@ summary(RLTS)
 
 MSE2 <- summary(RLTS)$sigma^2
 predict_RLTS=data.test$Length
-for (i in seq(1,160)){predict_RLTS[i]=RLTS$coefficients[1]+RLTS$coefficients[2]*data.test[i,1]+RLTS$coefficients[3]*data.test[i,2]+RLTS$coefficients[4]*data.test[i,3]+RLTS$coefficients[5]*data.test[i,2]*data.test[i,3]}
+for (i in seq(1,160)) {
+  predict_RLTS[i]=RLTS$coefficients[1]+
+                  RLTS$coefficients[2]*ifelse(data.test[i,1] == "male", 1, 0)+
+                  RLTS$coefficients[3]*data.test[i,2]+
+                  RLTS$coefficients[4]*data.test[i,3]+
+                  RLTS$coefficients[5]*data.test[i,2]*data.test[i,3]
+  }
 MSEP2 <- sum((predict_RLTS- data.test$Length)^2)/160
 MSE2
 MSEP2

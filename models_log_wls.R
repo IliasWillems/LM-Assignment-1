@@ -3,8 +3,10 @@
 ### final models: m4 (log-model) & m5 (WLS model)
 
 rm(list = ls())
-setwd("C:/Data/Emma/KU Leuven/Year 1/Semester 1/Linear models/Assignment")
-data.full <- read.table("dataset.txt", header = TRUE)
+# setwd("C:/Data/Emma/KU Leuven/Year 1/Semester 1/Linear models/Assignment")
+# data.full <- read.table("dataset.txt", header = TRUE)
+data.full <- read.csv("~/,School/Master/Linear Models/Exam Assignment/dataset.txt",
+         sep="")
 library(MASS)
 
 
@@ -36,6 +38,7 @@ summary(m2)
 
 ########
 # remedy for heteroscedasticity - option 2: weighted least squares
+m1.stdres <- stdres(m1)
 w <- 1/lm(abs(m1.stdres) ~ Sex + Canopy + Shrub + Size + Natural + I(Forest))$fitted.values^2
 m3 <- lm(Length ~ Sex + Canopy + Shrub + Size + Natural + I(Forest), weight = w, data = data.training)
 summary(m1)
@@ -83,6 +86,9 @@ stepAIC(m.null, scope=list(upper = ~ Sex + Canopy + Shrub + Size + Natural + I(F
 m4 <- lm(log(Length) ~ Sex + Canopy + Shrub + Natural, data = data.training)
 summary(m4)
 
-m5 <- lm(Length ~ Sex + Canopy + Shrub + Natural, weight = w, data = data.training)
+# Plot of the weighted residuals versus fitted values
+plot(m4$fitted.values, resid(m4)*sqrt(w))
+
+m5 <- lm(Length ~ Sex + Canopy + Shrub  + Natural, weight = w, data = data.training)
 summary(m5)
 
