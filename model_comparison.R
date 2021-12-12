@@ -77,6 +77,15 @@ round(data.frame(m_WLS$coefficients, m_WLS_val$coefficients), 3)
 #                               Compare the models                             #
 ################################################################################
 
+# Model Rsquares and AIC
+measures.df <- data.frame(
+                baseline=c(summary(m_baseline)$r.squared,AIC(m_baseline),BIC(m_baseline)),
+                interaction=c(summary(m_inter)$r.squared,AIC(m_inter),BIC(m_inter)),
+                log.trans=c(summary(m_log)$r.squared,AIC(m_log),BIC(m_log)),
+                WLS=c(summary(m_WLS)$r.squared,AIC(m_WLS),BIC(m_WLS)))
+rownames(measures.df) <- c("Rsquared", "AIC", "BIC")
+round(measures.df, 3)
+
 # Prediction accuracy: MSEP of test data based on training data
 baseline.pred <- predict(m_baseline, newdata = data.test)
 inter.pred <- predict(m_inter, newdata = data.test)
